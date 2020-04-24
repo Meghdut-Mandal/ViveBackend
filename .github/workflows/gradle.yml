@@ -28,11 +28,10 @@ jobs:
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with:
-            tag_name: 1.0v ${{ github.event.head_commit.message }}
-            release_name: Release of commit ${{ github.event.head_commit.message  }}
+            tag_name: 1.0v 
+            release_name: Release 
             draft: false
             prerelease: false
-            allowUpdates : true            
         - name: Upload a Release Asset
           uses: actions/upload-release-asset@v1.0.2
           env:
