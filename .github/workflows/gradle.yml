@@ -38,7 +38,7 @@ jobs:
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with:
-            tag_name: ${{commit_details.data.author.date}}
+            tag_name: ${{steps.author-date.outputs.result}}
             release_name: Release ${{ github.event.head_commit.message }}
             draft: false
             prerelease: false
