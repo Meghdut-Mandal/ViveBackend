@@ -29,7 +29,7 @@ jobs:
             script: |             
               const commit_details = await github.git.getCommit({owner: context.repo.owner, repo: context.repo.repo, commit_sha: context.sha});
               return commit_details.data.author.date
-        - run: echo date --date=$COMMITTED_AT +"%s"
+        - run: date --date=$COMMITTED_AT +"%s"
           env:
            COMMITTED_AT: ${{ steps.author-date.outputs.result }}
         - name: Create Release
@@ -38,7 +38,7 @@ jobs:
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with:
-            tag_name: 1.73v
+            tag_name: 1.723v
             release_name: Release ${{ github.event.head_commit.message }}
             draft: false
             prerelease: false
