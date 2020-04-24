@@ -22,22 +22,14 @@ jobs:
         - uses: eskatos/gradle-command-action@v1
           with:
             arguments: shadowJar
-        - name: Get current time
-        - uses: srfrnk/current-time@master
-          id: current-time
-          with:
-           format: X
-          env:
-            TIME: "${{ steps.current-time.outputs.time }}"
-            F_TIME: "${{ steps.current-time.outputs.formattedTime }}"
-        -  run: echo $TIME $F_TIME
         - name: Create Release
           id: create_release
         - uses: actions/create-release@v1
           env:
+            stamp: ${{ date +%s }}
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with:
-            tag_name: '${{ steps.current-time.outputs.time }}'
+            tag_name: '${{ stamp }}'
             release_name: Release ${{ github.event.head_commit.message }}
             draft: false
             prerelease: false
