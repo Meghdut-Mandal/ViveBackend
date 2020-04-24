@@ -24,12 +24,11 @@ jobs:
             arguments: shadowJar
         - name: Create Release
           id: create_release
-        - uses: ajilraju/action-date@v0.0.1
         - uses: actions/create-release@v1
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with:
-            tag_name: '+%B %-d'
+            tag_name: '${{date +%s}}'
             release_name: Release ${{ github.event.head_commit.message }}
             draft: false
             prerelease: false
