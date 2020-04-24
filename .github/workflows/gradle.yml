@@ -28,6 +28,7 @@ jobs:
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with:
+            tag: v1.8
             release_name: Release ${{ github.event.head_commit.message }}
             draft: false
             prerelease: false
@@ -40,3 +41,4 @@ jobs:
             asset_path: ./build/libs/backend-1.5-all.jar
             asset_name: backend-1.5-all.jar
             asset_content_type: application/zip
+        - run : echo ${{ steps.create_release.outputs.upload_url }}
