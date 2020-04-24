@@ -28,8 +28,8 @@ jobs:
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with:
-            tag_name: 1.5v 
-            release_name: Release 2
+            tag_name: 1.6v 
+            release_name: Release ${{ github.event.head_commit.message }}
             draft: false
             prerelease: false
         - name: Upload a Release Asset
