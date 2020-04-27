@@ -18,7 +18,7 @@ import java.io.File
  * For more information about this file: https://ktor.io/servers/configuration.html#hocon-file
  */
  val subjectsData = getDb("subjectsData")
-private fun getDb(fileName: String): Nitrite =
+private  fun getDb(fileName: String): Nitrite =
     nitrite {
         file = File("data/$fileName.db")
         compress = true

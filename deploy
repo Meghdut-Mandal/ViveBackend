@@ -1,0 +1,4 @@
+sudo apt-get upgrade
+sudo apt-get  update
+sudo apt-get  install -y  putty-tools
+pscp -i key_30  build/libs/backend-1.5-all.jar  ubuntu@13.251.36.49:/home/ubuntu/c/build/libs/

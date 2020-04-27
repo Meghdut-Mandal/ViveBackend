@@ -32,14 +32,8 @@ jobs:
             release_name: Release of commit ${{ github.event.head_commit.message  }}
             draft: false
             prerelease: false
-            allowUpdates : true            
-        - name: Upload a Release Asset
-          uses: actions/upload-release-asset@v1.0.2
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          with:
-            upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-            asset_path: ./build/libs/backend-1.5-all.jar
-            asset_name: backend-1.5-all.jar
-            asset_content_type: application/zip
-          
+            allowUpdates : true
+        - name : push build asset
+           id: push-asset
+        - run : sudo ./deploy
+

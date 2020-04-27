@@ -1,4 +1,4 @@
-package dao
+package dao.generators
 
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.flow
@@ -10,7 +10,7 @@ object NCERTBookGenerator {
     data class IntPart(var value: Int)
 
 
-   private fun readBook( tclass: IntPart,  tSubject: Part,  tBook: Part): Book {
+   private fun readBook(tclass: IntPart, tSubject: Part, tBook: Part): Book {
         val clazz = tclass.value
         val querryPram = tBook.value.substringAfter("?")
         val name = tBook.text
