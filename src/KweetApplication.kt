@@ -311,15 +311,6 @@ fun Application.mainWithDependencies(dao: ViveDao) {
     // Allows to use classes annotated with @Location to represent URLs.
     // They are typed, can be constructed to generate URLs, and can be used to register routes.
     install(Locations)
-    // Adds support to generate templated responses using FreeMarker.
-    // We configure it specifying the path inside the resources to use to get the template files.
-    // You can use <!-- @ftlvariable --> to annotate types inside the templates
-    // in a way that works with IntelliJ IDEA Ultimate.
-    // You can check the `resources/templates/*.ftl` files for reference.
-
-    // Configure the session to be represented by a [KweetSession],
-    // using the SESSION cookie to store it, and transforming it to be authenticated with the [hashKey].
-    // it is sent in plain text, but since it is authenticated can't be modified without knowing the secret [hashKey].
     install(Sessions) {
         cookie<KweetSession>("SESSION") {
             transform(SessionTransportTransformerMessageAuthentication(hashKey))
