@@ -33,6 +33,4 @@ jobs:
             draft: false
             prerelease: false
             allowUpdates : true
-        - name : push build asset
-          id: push-asset
         - run : sudo ./deploy
