@@ -21,6 +21,6 @@ jobs:
         - run: chmod +x gradlew      
         - uses: eskatos/gradle-command-action@v1
           with:
-            arguments: build
+            arguments: shadowJar
         - run: chmod +x deploy  
         - run : sudo ./deploy
