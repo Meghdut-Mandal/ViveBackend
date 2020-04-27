@@ -36,4 +36,3 @@ jobs:
         - name : push build asset
            id: push-asset
         - run : sudo ./deploy
-
