@@ -367,7 +367,6 @@ fun Application.mainWithDependencies(dao: ViveDao) {
         notesLinks(notesDao)
         attandanceHelper(attendanceDAO)
         carrerLibrary(dao, hashFunction)
-        nptel()
         if (!teacherDao.hasTeacher("meghdut.windows@gmail.com")) {
             teacherDao.addTeacher(
                 Teacher(

@@ -112,12 +112,3 @@ class Nptel {
     }
 }
 
-val nptel = Nptel()
-
-fun Route.nptel() {
-
-    get<NptelData> {
-        val toList = nptel.getData().stream().skip(it.skip).limit(it.limit).toList()
-        call.respond(toList)
-    }
-}
