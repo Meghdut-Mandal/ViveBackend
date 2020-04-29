@@ -3,4 +3,3 @@ sudo apt-get  update
 sudo apt-get  install -y  putty-tools
 sudo apt-get  install -y  putty
 echo y | pscp -i key_30  build/libs/backend-1.5-all.jar  ubuntu@13.251.36.49:/home/ubuntu/c/build/libs/
-plink -i key_30 ubuntu@13.251.36.49 ./run_x ; exit
