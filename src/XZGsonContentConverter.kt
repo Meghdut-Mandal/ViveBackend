@@ -21,7 +21,7 @@ class XZGsonContentConverter(val gsonConverter: GsonConverter = GsonConverter(gs
         val content = context.context.request.headers["Content-Negotiation"] ?: "None"
         return if (content == "compressed/xz") {
             val outputStream = ByteArrayOutputStream()
-            val xzOutputStream = XZOutputStream(outputStream, LZMA2Options(8))
+            val xzOutputStream = XZOutputStream(outputStream, LZMA2Options(4))
             xzOutputStream.write(gson.toJson(value).toByteArray())
             xzOutputStream.closeQuietly()
             outputStream.toByteArray()
