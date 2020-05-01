@@ -10,7 +10,7 @@ import org.dizitart.no2.objects.ObjectRepository
 class QuestionsDataBase(subjectData: Nitrite, var questionData: Nitrite) : SubjectsDataBase(subjectData) {
 
     fun getQuestionRepo(clazz: Int, subjectSnap: SubjectSnap, chapterSnap: ChapterSnap): ObjectRepository<Question> {
-        return questionData.getRepository("class=$clazz-${subjectSnap.id}-${chapterSnap.id}", Question::class.java)
+        return questionData.getRepository("$clazz=" + subjectSnap.slug + "/" + chapterSnap.slug, Question::class.java)
     }
 
     fun commit() {

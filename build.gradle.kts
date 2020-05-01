@@ -64,6 +64,7 @@ dependencies {
     implementation("io.ktor:ktor-client-gson:$ktor_version")
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
     implementation("io.ktor:ktor-client-apache:$ktor_version")
+    implementation("org.tukaani:xz:1.8")
 
     implementation("org.dizitart:potassium-nitrite:3.4.1")
     implementation("org.apache.pdfbox:pdfbox:2.0.19")

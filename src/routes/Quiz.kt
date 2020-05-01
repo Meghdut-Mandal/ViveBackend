@@ -18,7 +18,6 @@ import org.dizitart.no2.FindOptions
 import org.dizitart.no2.exceptions.ValidationException
 
 
-
 @KtorExperimentalLocationsAPI
 fun Route.quizLinks(questionsDataBase: QuestionsDataBase) {
 
@@ -35,10 +34,10 @@ fun Route.quizLinks(questionsDataBase: QuestionsDataBase) {
         call.respond(apiResponse)
     }
 
-    get<QuestionRequests> { request ->
+      get<QuestionRequests> { request ->
         val subjectSnap = questionsDataBase.getSubject(request.clazz, request.subject)
         val chapterSnap =
-                questionsDataBase.getChapter(request.clazz, subjectSnap, request.chapter)
+            questionsDataBase.getChapter(request.clazz, subjectSnap, request.chapter)
         val find = try {
             questionsDataBase.getQuestionRepo(request.clazz, subjectSnap, chapterSnap).find(FindOptions(request.skip, 10)).toList()
         }

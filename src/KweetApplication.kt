@@ -1,16 +1,16 @@
 import auth.JwtConfig
-import auth.Token
 import com.google.gson.Gson
-import dao.*
-import io.ktor.application.*
+import dao.ViveDao
+import io.ktor.application.Application
+import io.ktor.application.ApplicationCall
+import io.ktor.application.call
+import io.ktor.application.install
 import io.ktor.auth.Authentication
-import io.ktor.auth.UserPasswordCredential
-import io.ktor.auth.authenticate
 import io.ktor.auth.authentication
 import io.ktor.auth.jwt.JWTPrincipal
 import io.ktor.auth.jwt.jwt
 import io.ktor.features.*
-import io.ktor.gson.gson
+import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
@@ -24,11 +24,9 @@ import io.ktor.locations.locations
 import io.ktor.request.header
 import io.ktor.request.host
 import io.ktor.request.port
-import io.ktor.request.receive
 import io.ktor.response.respond
+import io.ktor.response.respondOutputStream
 import io.ktor.response.respondRedirect
-import io.ktor.routing.get
-import io.ktor.routing.post
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
@@ -42,14 +40,16 @@ import model.StringResponse
 import model.Teacher
 import model.User
 import model.getErrorResponse
+import okhttp3.internal.closeQuietly
 import org.slf4j.event.Level
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver
+import org.tukaani.xz.LZMA2Options
+import org.tukaani.xz.XZOutputStream
 import routes.*
 import java.io.File
 import java.math.BigInteger
 import java.net.URI
 import java.security.MessageDigest
-import java.text.DateFormat
 import java.time.Duration
 import java.util.concurrent.TimeUnit
 import javax.crypto.spec.SecretKeySpec
@@ -82,8 +82,6 @@ class StudentAPI {
 
     @Location("/subjects/")
     class Subjects {
-
-
         @Location("image/{slug}")
         class Image(val slug: String)
     }
@@ -169,7 +167,7 @@ class SubjectsRequest(val clazz: Int)
 class ChaptersRequest(val clazz: Int, val subject: String)
 
 @Location("quiz/questions")
-class QuestionRequests(val clazz: Int, val subject: String, val chapter: String, val skip: Int = 0)
+open class QuestionRequests(val clazz: Int, val subject: String, val chapter: String, val skip: Int = 0)
 
 @Location("noted/")
 class NoteRequest(val clazz: Int, val subject: String, val chapter: String)
@@ -317,10 +315,7 @@ fun Application.mainWithDependencies(dao: ViveDao) {
         }
     }
     install(ContentNegotiation) {
-        gson {
-            setDateFormat(DateFormat.LONG)
-            setPrettyPrinting()
-        }
+        register(ContentType.Any,XZGsonContentConverter())
     }
 
     install(SinglePageApplication) {
@@ -462,4 +457,13 @@ private val userIdPattern = "[a-zA-Z0-9_\\.]+".toRegex()
  * Or other things like a bad word filter.
  */
 internal fun userNameValid(userId: String) = userId.matches(userIdPattern)
-// rsync -r -v --progress -e ssh ubuntu@54.251.185.59:/  questionsData.db
+
+suspend inline fun ApplicationCall.respondXZ(message: Any) {
+    respondOutputStream {
+        this.use { outputStream ->
+            val xzOutputStream = XZOutputStream(outputStream, LZMA2Options(8))
+            xzOutputStream.write(gson.toJson(message).toByteArray())
+            xzOutputStream.closeQuietly()
+        }
+    }
+}

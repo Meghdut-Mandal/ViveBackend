@@ -4,14 +4,12 @@ import ImageConverter
 import TeacherAPI
 import TeacherAPI.SignUpPage
 import auth.JwtConfig
-import auth.Token
 import authFail
 import com.google.gson.Gson
 import dao.NotesDao
 import dao.SubjectTaughtDao
 import dao.TeacherDao
 import dao.UploadsDao
-import gson
 import hash
 import io.ktor.application.call
 import io.ktor.auth.UserPasswordCredential
@@ -164,7 +162,7 @@ fun Route.teachers(
                     return@post call.respond(StringResponse(300, "Invalid Upload Id"))
                 println("routes>>teachers  Upload id ${it.upload_id} ")
                 val upload = uploadsDao.getUpload(uploadId)
-                if (upload.teacherID!=teacher.id)
+                if (upload.teacherID != teacher.id)
                     return@post authFail()
                 val file = uploadsDao.getUploadFile(uploadId)
                 file.delete()
