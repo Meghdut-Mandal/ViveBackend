@@ -58,7 +58,7 @@ class ImageConverter(private val uploadsDao: UploadsDao, private val notesDao: N
                     ImageIO.write(bImage, fileExtension, fileOutputStream)
                 }
             }
-            numberOfPages
+            document.numberOfPages
         }
     }
 
