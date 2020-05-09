@@ -169,8 +169,6 @@ class ChaptersRequest(val clazz: Int, val subject: String)
 @Location("quiz/questions")
 open class QuestionRequests(val clazz: Int, val subject: String, val chapter: String, val skip: Int = 0)
 
-@Location("noted/")
-class NoteRequest(val clazz: Int, val subject: String, val chapter: String)
 
 @Location("note/file")
 class NoteFileRequest(val clazz: Int, val subject: String, val chapter: String, val fileName: String)
@@ -363,7 +361,7 @@ fun Application.mainWithDependencies(dao: ViveDao) {
             )
         }
         teachers(imageConverter, teacherDao, uploadsDao, subjectsTaughtDao, notesDao)
-        student(bookDao, subjectsTaughtDao, notesDao)
+        student(bookDao, subjectsTaughtDao, notesDao,NaivePdfCache(notesDao))
         static("styles") {
             resources("styles/")
         }

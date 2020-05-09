@@ -29,14 +29,12 @@ class NotesDao(notesDb: Nitrite, subjectData: Nitrite, val root: File) : Subject
         return repository.find(Note::id eq noteID).any()
     }
 
-    fun getNote(clazz: Int, subjectSnap: SubjectSnap, chapterSnap: ChapterSnap): Note {
-        val notesFolder = getNotesFolder(clazz, subjectSnap, chapterSnap)
-        val imageList = notesFolder.listFiles()?.toList() ?: arrayListOf()
-        imageList.sortedBy { it.nameWithoutExtension }
-        val notePages =
-                imageList.mapIndexed { index, file -> NotePage(index, "Page $index", file.name) }
-        val note =
-                Note(hash(Math.random()), subjectSnap.id.toString(), "Class $clazz ${subjectSnap.name} - ${chapterSnap.name}", notePages.size)
+    fun getNote(clazz: Int, subjectSnap: SubjectSnap, chapterSnap: ChapterSnap, pages: Int): Note {
+        val note = Note(
+            genHash(subjectSnap.slug,chapterSnap.slug), subjectSnap.id.toString(),
+            "Class $clazz ${subjectSnap.name} - ${chapterSnap.name}",
+            pages
+        )
         return note
     }
 
@@ -45,11 +43,16 @@ class NotesDao(notesDb: Nitrite, subjectData: Nitrite, val root: File) : Subject
         return repository.find().filter { it.subjectTaughtID == subjectTaughtID }.toList()
     }
 
-    fun getNotesFolder(clazz: Int, subjectSnap: SubjectSnap, chapterSnap: ChapterSnap) =
-            File(root, hash(clazz, subjectSnap.slug, chapterSnap.slug))
 
-    fun getNotesFolder(subjectTaught: String, chapterName: String) = File(root, genHash(subjectTaught, chapterName))
+    fun getNotesFolder(clazz: Int, subjectSnap: SubjectSnap, chapterSnap: ChapterSnap) =
+        File(root, hash(clazz, subjectSnap.slug, chapterSnap.slug))
+
+    fun getNotesFile(subjectTaught: String, chapterName: String) =getNotesFile(genHash(subjectTaught, chapterName))
+
+    fun getNotesFile(noteID: String)= File(getNotesFolder(noteID), "$noteID.pdf")
+
+    fun getNotesFolder(noteID: String)= File(root, noteID).apply { mkdirs() }
 
     private fun genHash(subjectTaught: String, chapterName: String) =
-            hash(subjectTaught, chapterName)
+        hash(subjectTaught, chapterName)
 }

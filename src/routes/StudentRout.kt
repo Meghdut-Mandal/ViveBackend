@@ -1,5 +1,6 @@
 package routes
 
+import NaivePdfCache
 import NotePageRequest
 import StudentAPI
 import dao.BookDao
@@ -13,16 +14,18 @@ import io.ktor.locations.post
 import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.response.respondFile
+import io.ktor.response.respondOutputStream
 import io.ktor.routing.Route
-import io.ktor.routing.post
 import model.Batch
 import model.StringResponse
+import okhttp3.internal.closeQuietly
+import org.apache.http.entity.ContentType
 import java.io.File
 
 fun Route.student(
     bookDao: BookDao,
     subjectTaughtDao: SubjectTaughtDao,
-    notesDao: NotesDao,
+    notesDao: NotesDao, naivePdfCache: NaivePdfCache,
     subjectImageDir: File = File("sub_image")
 ) {
 
@@ -46,10 +49,21 @@ fun Route.student(
 
 
     get<NotePageRequest> {
-        val file = File("notes/${it.id}", "p${it.pageno}.jpg")
-        if (file.exists())
-            call.respondFile(file)
-        else call.respond(HttpStatusCode.NotFound, StringResponse(404, "Page not found"))
+        val file = notesDao.getNotesFile(it.id)
+        if (file.exists()) {
+
+            if (naivePdfCache.hasPreview(it.id,it.pageno))
+            {
+                call.respondFile(naivePdfCache.getPreviewFile(it.id,it.pageno))
+            }else {
+                call.respondOutputStream(io.ktor.http.ContentType.Image.JPEG) {
+                    naivePdfCache.renderPage(this, it.id, it.pageno)
+                    closeQuietly()
+                }
+            }
+
+
+        } else call.respond(HttpStatusCode.NotFound, StringResponse(404, "Page not found"))
     }
 
     get<StudentAPI.LoadBooks> {
