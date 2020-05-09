@@ -4,6 +4,7 @@ import org.apache.pdfbox.io.MemoryUsageSetting
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.rendering.ImageType
 import org.apache.pdfbox.rendering.PDFRenderer
+import java.awt.image.BufferedImage
 import java.io.File
 import java.io.OutputStream
 import javax.imageio.ImageIO
@@ -30,9 +31,12 @@ class NaivePdfCache(private val notesDao: NotesDao) {
 
     fun renderPage(outputStream: OutputStream, noteId: String, pageNo: Int) {
         val pdfRenderer = cacheMap.computeIfAbsent(noteId, ::getRenderer).render
-        val renderImageWithDPI =
+        var renderImageWithDPI:BufferedImage? =
             pdfRenderer.renderImageWithDPI(pageNo, dpi.toFloat(), ImageType.RGB)
         ImageIO.write(renderImageWithDPI, fileExtension, outputStream)
+        renderImageWithDPI?.flush()
+        @Suppress("UNUSED_VALUE")
+        renderImageWithDPI=null
     }
 
 
