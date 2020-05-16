@@ -65,13 +65,12 @@ dependencies {
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
     implementation("io.ktor:ktor-client-apache:$ktor_version")
     implementation("org.tukaani:xz:1.8")
-
     implementation("org.dizitart:potassium-nitrite:3.4.1")
     implementation("org.apache.pdfbox:pdfbox:2.0.19")
     implementation("org.freemarker:freemarker:2.3.23")
     implementation("io.ktor:ktor-freemarker:$ktor_version")
     implementation("org.jsoup:jsoup:1.12.1")
-
+    implementation("org.ghost4j:ghost4j:1.0.1")
 
 }
 

@@ -1,5 +1,6 @@
 package routes
 
+import GhostScriptImageCache
 import NaivePdfCache
 import NotePageRequest
 import StudentAPI
@@ -25,7 +26,8 @@ import java.io.File
 fun Route.student(
     bookDao: BookDao,
     subjectTaughtDao: SubjectTaughtDao,
-    notesDao: NotesDao, naivePdfCache: NaivePdfCache,
+    notesDao: NotesDao,
+    naivePdfCache: GhostScriptImageCache,
     subjectImageDir: File = File("sub_image")
 ) {
 

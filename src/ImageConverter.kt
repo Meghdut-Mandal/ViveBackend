@@ -15,6 +15,8 @@ class ImageConverter(private val uploadsDao: UploadsDao, private val notesDao: N
     private val dpi = 150
 
     fun processUpload(uploadId: String) = executor.submit {
+
+
         var pdfFile: File? = null
         uploadsDao.updateStatus(uploadId, Upload.RECEIVED)
         try {

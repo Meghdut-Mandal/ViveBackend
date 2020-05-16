@@ -361,7 +361,7 @@ fun Application.mainWithDependencies(dao: ViveDao) {
             )
         }
         teachers(imageConverter, teacherDao, uploadsDao, subjectsTaughtDao, notesDao)
-        student(bookDao, subjectsTaughtDao, notesDao,NaivePdfCache(notesDao))
+        student(bookDao, subjectsTaughtDao, notesDao,GhostScriptImageCache(notesDao))
         static("styles") {
             resources("styles/")
         }
