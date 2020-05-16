@@ -373,6 +373,7 @@ fun Application.mainWithDependencies(dao: ViveDao) {
             resource("/home", "templates/sample_site/home.html")
         }
     }
+    System.gc()
 }
 
 suspend fun PipelineContext<Unit, ApplicationCall>.authFail() {

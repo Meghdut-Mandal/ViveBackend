@@ -19,7 +19,7 @@ class GhostScriptImageCache(private val notesDao: NotesDao) {
             println(">GhostScriptImageCache>launchGC  Started GC ")
             Thread{
                 System.gc()
-                Thread.sleep(500)
+                Thread.sleep(2000)
                 println(">GhostScriptImageCache>launchGC  GC Done ! ")
                 renderCount.compareAndSet(2,0)
             }.start()
@@ -55,10 +55,10 @@ class GhostScriptImageCache(private val notesDao: NotesDao) {
 
 
     fun renderPage(outputStream: OutputStream, noteId: String, pageNo: Int) {
+        launchGC()
         val pdfEntry = cacheMap.computeIfAbsent(noteId, ::getRenderer)
         pdfEntry.renderPage(outputStream, pageNo)
         renderCount.compareAndSet(0,1)
-        launchGC()
     }
 
     fun hasPreview(noteId: String, pageNo: Int): Boolean {
