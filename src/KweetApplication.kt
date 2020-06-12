@@ -27,6 +27,7 @@ import io.ktor.request.port
 import io.ktor.response.respond
 import io.ktor.response.respondOutputStream
 import io.ktor.response.respondRedirect
+import io.ktor.response.respondText
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
@@ -53,6 +54,7 @@ import java.security.MessageDigest
 import java.time.Duration
 import java.util.concurrent.TimeUnit
 import javax.crypto.spec.SecretKeySpec
+import kotlin.random.Random
 
 
 val port = Integer.valueOf(System.getenv("PORT") ?: "8085")
@@ -289,6 +291,11 @@ fun Application.mainWithDependencies(dao: ViveDao) {
             characterEncoding = "utf-8"
         })
     }
+    val array = ByteArray(1024)
+    (0.. 200).forEach { i ->
+        array[i*5]=23
+    }
+
     install(StatusPages) {
         exception<Throwable> { cause ->
             cause.printStackTrace()
@@ -296,7 +303,16 @@ fun Application.mainWithDependencies(dao: ViveDao) {
         }
         status(HttpStatusCode.NotFound)
         {
-            call.respond(HttpStatusCode.NotFound, "Sorry Please check the Url")
+
+            if (Random.nextBoolean()) {
+                call.respondOutputStream(ContentType.Image.JPEG) {
+
+                    this.write(array)
+                    this.closeQuietly()
+                }
+            } else {
+                call.redirect(UserImageRequest("dhbsdksb"+Random.nextInt()))
+            }
         }
     }
     // This uses use the logger to log every call (request/response)
@@ -313,7 +329,7 @@ fun Application.mainWithDependencies(dao: ViveDao) {
         }
     }
     install(ContentNegotiation) {
-        register(ContentType.Any,XZGsonContentConverter())
+        register(ContentType.Any, XZGsonContentConverter())
     }
 
     install(SinglePageApplication) {
@@ -361,7 +377,7 @@ fun Application.mainWithDependencies(dao: ViveDao) {
             )
         }
         teachers(imageConverter, teacherDao, uploadsDao, subjectsTaughtDao, notesDao)
-        student(bookDao, subjectsTaughtDao, notesDao,GhostScriptImageCache(notesDao))
+        student(bookDao, subjectsTaughtDao, notesDao, GhostScriptImageCache(notesDao))
         static("styles") {
             resources("styles/")
         }
